@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\BusinessHours;
+use App\Http\Resources\BusinessHourCollection;
+use App\Http\Resources\BusinessHourResource;
+use App\Models\BusinessHour;
 use Illuminate\Http\Request;
 
 class BusinessHoursController extends Controller
@@ -13,9 +15,7 @@ class BusinessHoursController extends Controller
     public function index()
     {
         try {
-            $business_hours = BusinessHours::all();
-
-            return response()->json($business_hours, 200);
+            return response()->json(new BusinessHourCollection(BusinessHour::all()), 200);
         } catch (\Throwable $th) {
             return $th;
         }
