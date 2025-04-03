@@ -76,7 +76,7 @@ class BusinessHoursSeeder extends Seeder
                 'close_at' => date("H:i:s", $close_time),
                 'lunch_start' => date("H:i:s", $lunch_start),
                 'lunch_end' => date("H:i:s", $lunch_end),
-                'is_every_other_week' => true,
+                'is_every_other_week' => false,
                 'other_week_start_date' => null
             ],
             [

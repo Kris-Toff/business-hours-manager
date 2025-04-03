@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BusinessHourRequest;
 use App\Http\Resources\BusinessHourCollection;
 use App\Http\Resources\BusinessHourResource;
 use App\Models\BusinessHour;
@@ -40,7 +41,7 @@ class BusinessHoursController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(BusinessHours $businessHours)
+    public function show(BusinessHour $businessHour)
     {
         //
     }
@@ -48,7 +49,7 @@ class BusinessHoursController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(BusinessHours $businessHours)
+    public function edit(BusinessHour $businessHour)
     {
         //
     }
@@ -56,15 +57,20 @@ class BusinessHoursController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, BusinessHours $businessHours)
+    public function update(BusinessHourRequest $request, BusinessHour $businessHour)
     {
-        //
+        try {
+            $result = $businessHour->update($request->all());
+            return response()->json(['message' => 'Successfully saved item'], 200);
+        } catch (\Throwable $th) {
+            return $th;
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(BusinessHours $businessHours)
+    public function destroy(BusinessHour $businessHour)
     {
         //
     }

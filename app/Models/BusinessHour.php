@@ -17,7 +17,6 @@ class BusinessHour extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'day',
         'is_open',
         'open_at',
         'close_at',
