@@ -15,3 +15,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
 });
 
 Route::get('/home', [HomeController::class, 'index']);
+Route::get('/next-opening', [HomeController::class, 'nextOpening']);
+Route::post('/next-opening-by-date', [HomeController::class, 'nextOpeningByDate']);

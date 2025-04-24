@@ -7,6 +7,7 @@ use App\Http\Resources\BusinessHourResource;
 use App\Models\BusinessHour;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Validator;
 
 class HomeController extends Controller
 {
@@ -30,50 +31,41 @@ class HomeController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Get next opening day
+     * return - date time
      */
-    public function create()
+    public function nextOpening()
     {
-        //
+        $now = Carbon::now();
+        $now->setTimezone('Asia/Hong_Kong');
+        $is_store_open = false;
+
+        do {
+            $now->addDay(1);
+            $day_of_the_week = $now->copy()->format("l");
+
+            $result = new BusinessHourResource(BusinessHour::where('day', $day_of_the_week)->first());
+
+            if ($result['is_open'])
+                $is_store_open = true;
+        } while (!$is_store_open);
+
+        // $now->copy()->format("Y-m-d")
+        return response()->json(['result' => $result, 'date' => $now->copy()->format("Y-m-d")], 200);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function nextOpeningByDate(Request $request)
     {
-        //
-    }
+        Validator::make($request->all(), [
+            'date' => 'required|date_format:Y-m-d',
+        ])->validate();
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        $dt = Carbon::createFromFormat('Y-m-d', $request->date);
+        $dt->setTimezone('Asia/Hong_Kong');
+        $day_of_the_week = $dt->copy()->format("l");
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+        $result = new BusinessHourResource(BusinessHour::where('day', $day_of_the_week)->first());
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return response()->json(['result' => $result, 'date' => $dt->copy()->format("Y-m-d")], 200);
     }
 }
